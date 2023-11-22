@@ -3,12 +3,23 @@ output signed[0:143]Y);
 
 wire signed [0:7]v[0:7]; // v contém os elementos de X separados em um array
 genvar i;
-
+/*
 generate
   for (i = 0; i < 8; i = i + 1) begin
 	assign v[i] = X[8*i +: 8];
   end
 endgenerate
+*/
+
+assign v[0] = X[0:7];
+assign v[1] = X[8:15];
+assign v[2] = X[16:23];
+assign v[3] = X[24:31];
+assign v[4] = X[32:39];
+assign v[5] = X[40:47];
+assign v[6] = X[48:55];
+assign v[7] = X[56:63];
+
 
 //even-odd decomp (depth0)
 wire signed [0:8] E[0:3], O[0:3];
