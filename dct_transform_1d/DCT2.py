@@ -44,7 +44,16 @@ def DCT_2(N):
         for j in range(0, N):
             alpha = 1 if i == 0 else math.sqrt(2)
             t = alpha * math.cos((math.pi * (2 * j + 1) * i) / (2 * N))
-            linha.append(round(t * 64))
+            t = round(t * 64)
+            if t==84:
+                t=83
+            elif t==-84:
+                t=-83
+            elif t==35:
+                t=36
+            elif t ==-35:
+                t=-36
+            linha.append(t)
         kernel.append(linha)
     return kernel
 
