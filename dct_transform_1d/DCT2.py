@@ -49,36 +49,70 @@ def DCT_2(N):
                 t=83
             elif t==-84:
                 t=-83
+
             elif t==35:
                 t=36
             elif t ==-35:
                 t=-36
+
+            elif t==26:
+                t=25
+            elif t==-26:
+                t=-25
+
+            elif t==30:
+                t=31
+            elif t==-30:
+                t=-31
+
+            elif t==39:
+                t=38
+            elif t==-39:
+                t=-38
+
+            elif t==47:
+                t=46
+            elif t==-47:
+                t=-46
             linha.append(t)
         kernel.append(linha)
     return kernel
 
 if __name__ == "__main__":
-    N = 8
+    N = 32
     lim_inf = -128
     lim_sup = 127
     result = DCT_2(N)
+    for linha in result:
+        print(linha)
 
     for c in range(0,1000):
-        x = [random.randint(lim_inf,lim_sup),random.randint(lim_inf,lim_sup),random.randint(lim_inf,lim_sup),random.randint(lim_inf,lim_sup),random.randint(lim_inf,lim_sup),random.randint(lim_inf,lim_sup),random.randint(lim_inf,lim_sup),random.randint(lim_inf,lim_sup)]
+        x = []#[random.randint(lim_inf,lim_sup),random.randint(lim_inf,lim_sup),random.randint(lim_inf,lim_sup),random.randint(lim_inf,lim_sup),random.randint(lim_inf,lim_sup),random.randint(lim_inf,lim_sup),random.randint(lim_inf,lim_sup),random.randint(lim_inf,lim_sup)]
+        x_bin = []
+        for i in range(0,N):
+            temp = []
+            for j in range(0,N):
+                temp.append(random.randint(lim_inf,lim_sup))
+            x.append(temp)
+            x_bin.append(list(map(decimal_to_8bit_signed_binary,temp)))
 
         transformed = np.matmul(result,x)
+        #print(transformed)
 
-        x_bin = list(map(decimal_to_8bit_signed_binary,x))
-        transformed_bin = list(map(decimal_to_18bit_binary,transformed))
+ 
+       # x_bin = list(map(decimal_to_8bit_signed_binary,x))
 
 
         x_input = ""
-        for vetor in x_bin:
-            x_input+=str(vetor)
+        for linha in x_bin:
+            for vetor in linha:
+                x_input+=str(vetor)
 
         output = ""
-        for vetor in transformed_bin:
-            output+=str(vetor)
+        for linha in transformed:
+            for vetor in linha:
+                #print(vetor)
+                output+=str(decimal_to_18bit_binary(vetor))
 
         print(x_input + " " + output)
 
