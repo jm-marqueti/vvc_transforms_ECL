@@ -1,9 +1,9 @@
 # vvc_transforms_ECL
 
-dct_transform_1d: One dimensional DCT-2 (N=8) <br>
-dct_transform_2d: Two dimensional DCT-2 (N=8)
+dct2_1d: One dimensional Multiple Size DCT-2 <br>
+dct_transform_2d: Two dimensional DCT-2 (N=8) [DEPRECATED]
 
 TODO: 
-      incluir transformas N=4 até N=32 <br>
+      testbench <br>
       expandir para 2D <br>
       sintetizar circuitos <br>
