@@ -76,7 +76,7 @@ if __name__ == "__main__":
         formatacao_input+=x_input
 
         output = ""
-        formatacao_output = prefixos_de_tamanho[N]
+        formatacao_output = ""
         for linha in transformed:
             for vetor in linha:
                 output+=str(decimal_to_16bit_binary(int(vetor/pow(2,11))))
