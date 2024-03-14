@@ -60,29 +60,34 @@ if __name__ == "__main__":
         x_bin = []
         for l in range(0,N):
             temp = []
-            for m in range(0,int(32/N)):
-                temp.append(random.randint(lim_inf,lim_sup))
+            temp.append(random.randint(lim_inf,lim_sup))
             x.append(temp)
             x_bin.append(list(map(decimal_to_16bit_binary,temp)))
         transformed = np.matmul(kernel,x)
 
-        x_input = ""
+        x_input = prefixos_de_tamanho[N]
         for linha in x_bin:
             for vetor in linha:
                 x_input+=str(vetor)
-        formatacao_input = prefixos_de_tamanho[N]
-        for j in range(0,512-(len(x_input))):
+
+        formatacao_input = ""
+        for j in range(0,514-(len(x_input))):
             formatacao_input += '0'
-        formatacao_input+=x_input
+
+        x_input+=formatacao_input
+        formatacao_input=x_input
 
         output = ""
-        formatacao_output = ""
         for linha in transformed:
             for vetor in linha:
                 output+=str(decimal_to_16bit_binary(int(vetor/pow(2,11))))
 
+
+        formatacao_output=""
         for j in range(0,512-(len(output))):
             formatacao_output += '0'
 
-        formatacao_output+=output
+        output += formatacao_output
+        formatacao_output = output
+
         print(formatacao_input + " " + formatacao_output)
