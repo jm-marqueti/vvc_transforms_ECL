@@ -29,6 +29,17 @@ def decimal_to_32bit_binary(decimal_number):
 
     return binary_number
 
+def decimal_to_27bit_binary(decimal_number):
+    if decimal_number < -134217728  or decimal_number > 134217727:
+        raise ValueError("Decimal number is out of the 27-bit signed integer range")
+
+    if decimal_number < 0:
+        binary_number = bin(decimal_number & 0x7FFFFF)[2:]
+    else:
+        binary_number = format(decimal_number, '027b')
+
+    return binary_number
+
 def DCT_2(N):
     kernel = []
     for i in range(0, N):
@@ -80,7 +91,10 @@ if __name__ == "__main__":
         output = ""
         for linha in transformed:
             for vetor in linha:
-                output+=str(decimal_to_16bit_binary(int(vetor/pow(2,11))))
+                #print(decimal_to_27bit_binary(vetor))
+                output+= decimal_to_27bit_binary(vetor)[:16]
+                #print(output)
+                #output+=str(decimal_to_16bit_binary(int(vetor/pow(2,11))))
 
 
         formatacao_output=""
