@@ -35,10 +35,13 @@ def decimal_to_27bit_binary(decimal_number):
 
     if decimal_number < 0:
         binary_number = bin(decimal_number & 0x7FFFFF)[2:]
+        for j in range(0,27-len(binary_number)):
+            binary_number = "1" + binary_number
     else:
         binary_number = format(decimal_number, '027b')
 
     return binary_number
+
 
 def DCT_2(N):
     kernel = []
@@ -63,8 +66,8 @@ if __name__ == "__main__":
         i = random.randint(0,3)
         N = 4 * pow(2,i)
 
-        lim_inf = -32768
-        lim_sup = 32767
+        lim_inf = -1000
+        lim_sup = 1000
         kernel = DCT_2(N)
 
         x = []
@@ -104,4 +107,4 @@ if __name__ == "__main__":
         output += formatacao_output
         formatacao_output = output
 
-        print(formatacao_input + " " + formatacao_output)
+        print(formatacao_input + formatacao_output)
