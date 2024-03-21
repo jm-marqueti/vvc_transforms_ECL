@@ -7,3 +7,4 @@ TODO:
       expandir para 2D <br>
       testbench 2D <br>
       sintetizar circuitos <br>
+      aplicar gating <br>
