@@ -1,7 +1,0 @@
-module dct2_4 (input signed [19:0]X[0:3], 
-output signed [15:0]Ye[0:1], Yo[0:1]);
-
-
-
-
-endmodule
