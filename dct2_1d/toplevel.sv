@@ -1,6 +1,6 @@
 module toplevel(input signed [0:511]X_test,
 input [1:0]N,
-output signed [511:0]Y);
+output signed [0:511]Y);
 
 wire signed [16:0] X_16[0:15], DCT_16_input[0:15], Y16E[0:15]; 
 wire signed [17:0] X_8[0:7], DCT_8_input [0:7], Y8E [0:7];
@@ -65,7 +65,7 @@ permutate PERMUTATE(Y2E_shifted, Y2O_shifted, Y4O_shifted, Y8O_shifted, Y16O_shi
 
 
 
-wire signed [15:0] Y_test[31:0]; // <---- Temporary
+wire signed [15:0] Y_test[0:31]; // <---- Temporary
 generate
     for (i = 0; i < 32; i = i + 1) begin : pack_loop
         assign Y_test[i] = Y[(i*16) +: 16];
