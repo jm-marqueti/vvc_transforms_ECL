@@ -42,28 +42,7 @@ def decimal_to_27bit_binary(decimal_number):
 
     return binary_number
 
-def signed_int(binary_str):
-    # Verifica se o número é negativo
-    is_negative = binary_str[0] == '1'
-    if is_negative:
-        # Se for negativo, converte para complemento de dois
-        binary_str = twos_complement(binary_str)
 
-    # Converte o número binário para decimal
-    decimal = int(binary_str, 2)
-
-    # Se for negativo, ajusta o valor
-    if is_negative:
-        decimal -= 2 ** len(binary_str)  # Subtrai o máximo valor positivo representável
-
-    return decimal
-
-def twos_complement(binary_str):
-    # Inverte os bits
-    inverted = ''.join('1' if bit == '0' else '0' for bit in binary_str)
-    # Adiciona 1 ao número invertido
-    twos_comp = bin(int(inverted, 2) + 1)[2:]
-    return twos_comp
 
 def DCT_2(N):
     kernel = []
@@ -80,6 +59,8 @@ def DCT_2(N):
                 t = t
             linha.append(t)
         kernel.append(linha)
+    aux = np.array(kernel)
+
     return kernel
 
 if __name__ == "__main__":
@@ -94,6 +75,7 @@ if __name__ == "__main__":
 
         x = []
         x_bin = []
+         
         for p in range(0,N):
             linha = []
             linha_bin = []
@@ -106,61 +88,76 @@ if __name__ == "__main__":
             #print(x)
             x_bin.append(linha_bin[0]) #INPUT LINHA POR LINHA
 
+        x = [[ 9957, -6670, -2671, -1448], 
+             [-9677, -8711, -6390,  5562],
+             [ 9113,  8882, -1657, -2524],
+             [ 7711,  2636,  4057,  6518]]
+
+      #  x= [[-1, -2, -3, -4]]
+
+        x_bin = []
+        for linha in x:
+            x_bin.append(list(map(decimal_to_16bit_binary,linha)))
+
+        x_bin = np.array(x_bin)
+        
+
+
         x_bonito = np.array(x)
        # x_bin_b = np.array(x_bin)
-        print("INPUT: ")
-        print(x_bonito)
-        #print(x_bin_b)
+        x_bin_2=[]
+        for linha in x_bin:
+            linha_bin = []
+            for vetor in linha:
+                #print(vetor)
+                if(vetor[0]=='1'):
+                    linha_bin.append(int(vetor,2)-(1<<len(vetor)))
+                else:
+                    linha_bin.append(int(vetor,2))
+                
+
+            x_bin_2.append(linha_bin)
+
+        x = np.array(x).transpose()
         transformed_med = np.array(np.matmul(kernel,x))
         # tem que truncar os últimos 16 bits que nem na linha 116 aqui e lá (2 vezes) se não da erro numérico
         # transformed_med -> binario -> binario truncado -> decimal -> transpor -> multiplica pelo kernel -> resultado
-
+        
         new_transformed_med = []
         for linha in transformed_med:
             new_linha = []
             for vetor in linha:
                 vetor_bin = decimal_to_27bit_binary(vetor)[:16] # binario -> binario truncado 
-                new_linha.append(signed_int(vetor_bin)) #binario truncado -> decimal signed
+                if(vetor_bin[0]=='1'):
+                    new_linha.append(int(vetor_bin,2)-(1<<len(vetor_bin)))
+                else:
+                    new_linha.append(int(vetor_bin,2))
+                #new_linha.append(int(vetor_bin,2)-(1<<16)) #binario truncado -> decimal signed
             new_transformed_med.append(new_linha)
 
-        new_transformed_med = np.array(new_transformed_med)
+        new_transformed_med = np.array(new_transformed_med).transpose()
 
-
-        print("=========================")
-        print("Resultado decimal da transformação 1D: ")
-
-        print(new_transformed_med)
         
         
-        new_transformed_med = new_transformed_med.transpose() #decimal -> transpor
-        print("=========================")
-        print("Resultado transposto: ")
-        print(new_transformed_med)
+        new_transformed_med = new_transformed_med#.transpose() #decimal -> transpor
 
         transformed_fin = np.matmul(kernel,new_transformed_med) #transpor -> multiplica pelo kernel -> resultado
-        print("=========================")
-        print("Resultado transformação 2D antes do truncamento: ")
-        print(transformed_fin)
 
         new_transformed_fin = []
         for linha in transformed_fin:
             new_linha = []
             for vetor in linha:
                 vetor_bin = decimal_to_27bit_binary(vetor)[:16] # binario -> binario truncado 
-                new_linha.append(signed_int(vetor_bin)) #binario truncado -> decimal signed
+                if(vetor_bin[0]=='1'):
+                    new_linha.append(int(vetor_bin,2)-(1<<len(vetor_bin)))
+                else:
+                    new_linha.append(int(vetor_bin,2))
+                #new_linha.append(int(vetor_bin,2)-(1<<len(vetor_bin))) #binario truncado -> decimal signed
             new_transformed_fin.append(new_linha)
 
         new_transformed_fin = np.array(new_transformed_fin)
 
-        print("=========================")
-        print("Resultado transformação 2D: ")
-        print(new_transformed_fin)
 
-
-        print("=========================")
-        print("Resultado transformação 2D transposta: ")
-        new_transformed_fin = new_transformed_fin.transpose()
-        print(new_transformed_fin)
 
 
         #Tirar dúvida sobre tamanho e formato do input output. Num de bits nos dois.
@@ -180,9 +177,10 @@ if __name__ == "__main__":
                 for p in range(0,514-(len(x_input))):
                         formatacao_input += '0'
                 x_input+=formatacao_input
-                print(x_input)
+            #    print(x_input)
                 file.write(x_input+"\n")
-        print("=======================")
+
+
         #formatacao_input = ""
         #for j in range(0,514-(len(x_input))):
         #    formatacao_input += '0'
@@ -207,7 +205,7 @@ if __name__ == "__main__":
                 for p in range(0,514-(len(x_output))):
                         formatacao_output += '0'
                 x_output+=formatacao_output
-                print(x_output)
+             #   print(x_output)
                 file.write(x_output+"\n")
 
 
