@@ -1,18 +1,16 @@
-import numpy as np
 import math
 from math import sqrt, sin
-import math
-import random
+
 
 def DST7(N):
     kernel = []
     for i in range(0,N):
         linha = []
         for j in range(0,N):
-            raiz = sqrt(4/(2*N +1)) 
+            raiz = sqrt(1/(2*N +1)) 
             top_div = math.pi*(2*i +1) * (j +1)
             temp = raiz * sin(top_div/(2*N+1))
-            linha.append(round(temp*128))
+            linha.append(round(temp*256))
         kernel.append(linha)
 
     return kernel
