@@ -34,7 +34,7 @@ def decimal_to_27bit_binary(decimal_number):
         raise ValueError("Decimal number is out of the 27-bit signed integer range")
 
     if decimal_number < 0:
-        binary_number = bin(decimal_number & 0x7FFFFF)[2:]
+        binary_number = bin(decimal_number & 0x7FFFFFF)[2:]
         for j in range(0,27-len(binary_number)):
             binary_number = "1" + binary_number
     else:
