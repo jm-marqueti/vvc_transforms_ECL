@@ -66,8 +66,8 @@ if __name__ == "__main__":
         i = random.randint(0,3)
         N = 4 * pow(2,i)
 
-        lim_inf = -1000
-        lim_sup = 1000
+        lim_inf = -32000
+        lim_sup = 32000
         kernel = DCT_2(N)
 
         x = []
