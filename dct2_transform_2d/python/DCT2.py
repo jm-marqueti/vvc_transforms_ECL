@@ -34,7 +34,7 @@ def decimal_to_27bit_binary(decimal_number):
         raise ValueError("Decimal number is out of the 27-bit signed integer range")
 
     if decimal_number < 0:
-        binary_number = bin(decimal_number & 0x7FFFFF)[2:]
+        binary_number = bin(decimal_number & 0x7FFFFFF)[2:]
         for j in range(0,27-len(binary_number)):
             binary_number = "1" + binary_number
     else:
@@ -69,8 +69,8 @@ if __name__ == "__main__":
         i = random.randint(0,0) #0 a 3
         N = 4 * pow(2,i)
 
-        lim_inf = -10000
-        lim_sup = 10000
+        lim_inf = -255
+        lim_sup = 255
         kernel = DCT_2(N)
 
         x = []
@@ -88,10 +88,6 @@ if __name__ == "__main__":
             #print(x)
             x_bin.append(linha_bin[0]) #INPUT LINHA POR LINHA
 
-        x = [[ 9957, -6670, -2671, -1448], 
-             [-9677, -8711, -6390,  5562],
-             [ 9113,  8882, -1657, -2524],
-             [ 7711,  2636,  4057,  6518]]
 
       #  x= [[-1, -2, -3, -4]]
 
@@ -127,7 +123,7 @@ if __name__ == "__main__":
         for linha in transformed_med:
             new_linha = []
             for vetor in linha:
-                vetor_bin = decimal_to_27bit_binary(vetor)[:16] # binario -> binario truncado 
+                vetor_bin = decimal_to_27bit_binary(vetor)[16:] # binario -> binario truncado 
                 if(vetor_bin[0]=='1'):
                     new_linha.append(int(vetor_bin,2)-(1<<len(vetor_bin)))
                 else:
