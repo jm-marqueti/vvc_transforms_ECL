@@ -88,8 +88,15 @@ if __name__ == "__main__":
             #print(x)
             x_bin.append(linha_bin[0]) #INPUT LINHA POR LINHA
 
+      #  x = [[ 9957, -6670, -2671, -1448], 
+       #      [-9677, -8711, -6390,  5562],
+        #     [ 9113,  8882, -1657, -2524],
+         #    [ 7711,  2636,  4057,  6518]]
+        #x= [[  35, -245,  192, -229],[-104,   97,   35, -101],[-223, -138,   10,  203],[  87, -115, -139,   -8]]
 
       #  x= [[-1, -2, -3, -4]]
+
+
 
         x_bin = []
         for linha in x:
@@ -100,6 +107,7 @@ if __name__ == "__main__":
 
 
         x_bonito = np.array(x)
+        print(x_bonito)
        # x_bin_b = np.array(x_bin)
         x_bin_2=[]
         for linha in x_bin:
@@ -123,7 +131,7 @@ if __name__ == "__main__":
         for linha in transformed_med:
             new_linha = []
             for vetor in linha:
-                vetor_bin = decimal_to_27bit_binary(vetor)[16:] # binario -> binario truncado 
+                vetor_bin = decimal_to_27bit_binary(vetor)[:16] # binario -> binario truncado 
                 if(vetor_bin[0]=='1'):
                     new_linha.append(int(vetor_bin,2)-(1<<len(vetor_bin)))
                 else:
@@ -143,7 +151,9 @@ if __name__ == "__main__":
         for linha in transformed_fin:
             new_linha = []
             for vetor in linha:
-                vetor_bin = decimal_to_27bit_binary(vetor)[:16] # binario -> binario truncado 
+                print(decimal_to_27bit_binary(vetor))
+                vetor_bin = decimal_to_27bit_binary(vetor)[15:] # binario -> binario truncado 
+                print(vetor_bin)
                 if(vetor_bin[0]=='1'):
                     new_linha.append(int(vetor_bin,2)-(1<<len(vetor_bin)))
                 else:
@@ -152,6 +162,7 @@ if __name__ == "__main__":
             new_transformed_fin.append(new_linha)
 
         new_transformed_fin = np.array(new_transformed_fin)
+        print(new_transformed_fin)
 
 
 
@@ -188,7 +199,7 @@ if __name__ == "__main__":
         for linha in transformed_fin:
             for vetor in linha:
                 #print(decimal_to_27bit_binary(vetor))
-                output+= decimal_to_27bit_binary(vetor)[:16]
+                output+= decimal_to_27bit_binary(vetor)[15:]
                 #print(output)
                 #output+=str(decimal_to_16bit_binary(int(vetor/pow(2,11))))
 
