@@ -181,7 +181,7 @@ if __name__ == "__main__":
                 for k in range(N):
                     x_input += x_bin[j][k]
                 formatacao_input = ""
-                for p in range(0, 514 - (len(x_input))):
+                for p in range(0, 290 - (len(x_input))):
                     formatacao_input += '0'
                 x_input += formatacao_input
                 #    print(x_input)
