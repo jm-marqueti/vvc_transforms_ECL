@@ -76,8 +76,8 @@ def DCT_2(N):
 
 if __name__ == "__main__":
     prefixos_de_tamanho = {4: "00", 8: "01", 16: "10", 32: "11"}
-    for cases in range(0, 1):  # numero de matrizes geradas
-        i = random.randint(0, 0)  # 0 a 3
+    for cases in range(0, 1000):  # numero de matrizes geradas
+        i = random.randint(0, 3)  # 0 a 3
         N = 4 * pow(2, i)
 
         lim_inf = -255
@@ -114,7 +114,7 @@ if __name__ == "__main__":
         x_bin = np.array(x_bin)
 
         x_bonito = np.array(x)
-        print(x_bonito)
+       # print(x_bonito)
         # x_bin_b = np.array(x_bin)
         x_bin_2 = []
         for linha in x_bin:
@@ -155,9 +155,9 @@ if __name__ == "__main__":
         for linha in transformed_fin:
             new_linha = []
             for vetor in linha:
-                print(decimal_to_27bit_binary(vetor))
+               # print(decimal_to_27bit_binary(vetor))
                 vetor_bin = decimal_to_27bit_binary(vetor)[:16]  # binario -> binario truncado
-                print(vetor_bin)
+               # print(vetor_bin)
                 if (vetor_bin[0] == '1'):
                     new_linha.append(int(vetor_bin, 2) - (1 << len(vetor_bin)))
                 else:
@@ -166,7 +166,7 @@ if __name__ == "__main__":
             new_transformed_fin.append(new_linha)
 
         new_transformed_fin = np.array(new_transformed_fin)
-        print(new_transformed_fin)
+        #print(new_transformed_fin)
 
         # Tirar dúvida sobre tamanho e formato do input output. Num de bits nos dois.
 
@@ -175,7 +175,7 @@ if __name__ == "__main__":
         #     for vetor in linha:
         #         x_input+=str(vetor)
 
-        with open('goldenmodel_input.dat', 'w') as file:
+        with open('goldenmodel_input.dat', 'a') as file:
             for j in range(N):
                 x_input = prefixos_de_tamanho[N]
                 for k in range(N):
@@ -202,7 +202,7 @@ if __name__ == "__main__":
                 # print(output)
                 # output+=str(decimal_to_16bit_binary(int(vetor/pow(2,11))))
 
-        with open('goldenmodel_output.dat', 'w') as file:
+        with open('goldenmodel_output.dat', 'a') as file:
             for j in range(N):
                 x_output = ""
                 for k in range(N):
