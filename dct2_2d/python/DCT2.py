@@ -208,7 +208,7 @@ if __name__ == "__main__":
                 for k in range(N):
                     x_output += decimal_to_27bit_binary(new_transformed_fin[j][k])
                 formatacao_output = ""
-                for p in range(0, 514 - (len(x_output))):
+                for p in range(0, 512 - (len(x_output))):
                     formatacao_output += '0'
                 x_output += formatacao_output
                 #   print(x_output)
