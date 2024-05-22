@@ -80,7 +80,7 @@ if __name__ == "__main__":
     ##Limpando arquivos##
     with open('goldenmodel_input.dat', 'w') as file:
             file.write("")
-    with open('goldenmodel_output.dat', 'a') as file:
+    with open('goldenmodel_output.dat', 'w') as file:
         file.write("")
 
     for cases in range(0, 1000):  # numero de matrizes geradas
