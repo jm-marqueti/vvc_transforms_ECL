@@ -1,13 +1,80 @@
 import struct
 import matplotlib.pyplot as plt
+import time
+import pickle
 
-def prepare_probabilities(data):
-    probabilities = {}
-    for key in data:
-        total = len(data[key]) #numero total de amostras
-        dic_occurs = {} #dicionário indicando "vaolr de amostra : ocorrências"
-        if key not in probabilities:
-            probabilities[key] = {}
+
+#####Estético#####
+RED = "\033[31m"
+GREEN = "\033[32m"
+BLUE = "\033[34m"
+YELLOW = "\033[33m"
+CYAN = "\033[36m"
+MAGENTA = "\033[35m"
+WHITE = "\033[37m"
+RESET = "\033[0m"
+##################
+def prepare_probabilites_adj(data):
+    """
+    Pega o dicionário de dados e itera sobre cada valor transformando seu valor de ocorrência na faixa superior utilizada para geração de número aleatório
+    exemplo:
+        {1:{'total_vizinhos': 10,1:4,5:2,9:4}}
+    """
+    data_aux = data #dict(sorted(data.items(), key=lambda item: item[1]))
+    for indice in data_aux:
+        soma = 0
+        data_aux[indice] = dict(sorted(data_aux[indice].items(), key=lambda item: item[1]))
+        for val in data_aux[indice]:
+            if val =="ocorrencias" or val =="total_vizinhos":
+                pass
+            else:
+                data_aux[indice][val]+=soma
+                soma = data_aux[indice][val]
+
+    return data_aux
+
+def prepare_probabilites_00(data):
+    data_aux = dict(sorted(data.items(), key=lambda item: item[1]))
+    soma = 0
+    for val in data_aux:
+        if val =="total_blocos":
+            pass
+        else:
+            data_aux[val]+=soma
+            soma = data_aux[val]
+
+    return data_aux
+
+def get_total_samples(data): #verificar se bate com o total retornado na main, mas acho que sim
+    count = 0
+    for indice in data_neighbours:
+        count += data_neighbours[indice]['ocorrencias']
+
+    return count
+
+def plot_dist(data_neighbours,total):
+    data_total = {}
+    #total_samples = get_total_samples(data_neighbours)
+    soma = 0
+    for indice in data_neighbours:
+        data_total[indice] = data_neighbours[indice]['ocorrencias']/total
+        soma += data_total[indice]
+    print(soma)
+
+
+    fig, ax = plt.subplots()
+    
+    # Plot the data
+    ax.bar(data_total.keys(),data_total.values())
+    
+    # Add labels and title
+    ax.set_xlabel('Valor de Amostra')
+    ax.set_ylabel('Numero de ocorrências')
+    ax.set_title('Distribuição de valores de Resíduo')
+    
+    # Show the plot
+    plt.show()
+
 
 
 def prepare_data(matrix, size, data):
@@ -26,25 +93,30 @@ def prepare_data(matrix, size, data):
            #     print(current_value)
            # print(current_value)
             if current_value not in data_aux: 
-                data_aux[current_value] = {'total':0} #inicializa o dicionário de valores no dicionário com contador total de amostras
+                data_aux[current_value] = {'total_vizinhos':0, "ocorrencias": 0} #inicializa o dicionário de valores no dicionário com contador total de vizinhos e ocorrencia
+            else:
+                data_aux[current_value]["ocorrencias"]+=1
+
+
             if i != size-1:
                 hor_val = matrix[i+1][j]
                 if hor_val not in data_aux[current_value]:
                     data_aux[current_value][hor_val] = 0
                 data_aux[current_value][hor_val]+=1 #adiciona 1 no contador de ocorrência de vizinhança espacial do current_value
-                data_aux[current_value]['total']+=1
+                data_aux[current_value]['total_vizinhos']+=1
             if j != size-1:
                 vert_val = matrix[i][j+1]
                 if vert_val not in data_aux[current_value]:
                     data_aux[current_value][vert_val] = 0
                 data_aux[current_value][vert_val]+=1 #adiciona 1 no contador de ocorrência de vizinhança espacial do current_value
-                data_aux[current_value]['total']+=1
+                data_aux[current_value]['total_vizinhos']+=1
     #print(data_aux)
     return data_aux
 
 def read_file(file_path):
     data_neighbours = {}
     data_00 = {"total_blocos" : 0}
+    total_samples = 0
 
     try:
         with open(file_path, 'rb') as file:
@@ -63,6 +135,7 @@ def read_file(file_path):
                     print("End of file reached or insufficient data for height.")
                     break  # End of file reached
                 height = struct.unpack('B', height_bytes)[0]  # Use 'B' for unsigned 8-bit integer
+                total_samples += width*height
               #  print(f"H = {height}")
 
                 # Read the matrix of 9-bit integers packed into 16-bit integers
@@ -104,32 +177,33 @@ def read_file(file_path):
 
     except FileNotFoundError:
         print(f"File {file_path} not found.")
-    except ValueError as ve:
-        print(f"Value error: {ve}")
-   # except Exception as e:
-   #     print(f"An error occurred: {e}")
-    #print(data)
-    return data_00, data_neighbours
+
+    return data_00, data_neighbours, total_samples
 
 if __name__ == "__main__":
+    start_time = time.time()
     file_path = 'saida_bin.dat'
-    data_00, data_neighbours = read_file(file_path)
+    data_00, data_neighbours, total_samples = read_file(file_path)
+    #total_samples = get_total_samples(data_neighbours)
+   # print(data_00)
+  #  print(data_neighbours)
+    end_time = time.time()
+    total_time = end_time - start_time
+    print(f"{GREEN} DONE: {total_samples} samples processed in {total_time:.2f} secs{RESET}")
+    plot_dist(data_neighbours,total_samples)
+
+    data_neighbours = prepare_probabilites_adj(data_neighbours)
+    data_00 = prepare_probabilites_00(data_00)
     print(data_00)
-    print(data_neighbours)
-    data_total = {}
-    for indice in data_neighbours:
-        data_total[indice] = data_neighbours[indice]['total']
 
-    fig, ax = plt.subplots()
-    
-    # Plot the data
-    ax.bar(data_total.keys(),data_total.values())
-    
-    # Add labels and title
-    ax.set_xlabel('Valor de Amostra')
-    ax.set_ylabel('Numero de ocorrências')
-    ax.set_title('Distribuição de valores de Resíduo')
-    
-    # Show the plot
-    plt.show()
 
+    with open('data_neighbours.pkl', 'wb') as file: #salvando o dicionário de adjacencia
+        pickle.dump(data_neighbours, file)
+    with open('data_00.pkl', 'wb') as file: #salvando o dicionário de posições 0
+        pickle.dump(data_00, file)
+
+    #with open('data_neighbours.pkl', 'rb') as file:
+    #    loaded_dict = pickle.load(file)
+
+    
+    
