@@ -1,5 +1,6 @@
 import struct
 import matplotlib.pyplot as plt
+import numpy as np
 import time
 import pickle
 import random
@@ -22,13 +23,13 @@ def gera_valor_inicial(data_00):
     for val in data_00:
         if r <= data_00[val]: #como o dicionário está ordenado, o primeiro valor que ele encontrar em que r<=data_00[val] será o valor gerado
             valor_gerado = val
-            print(valor_gerado)
+            #print(valor_gerado)
             break
     return valor_gerado
 
 def gera_valor(valor_ref, data_adj):
     max_val = data_adj[valor_ref]["total_vizinhos"]
-    print(max_val)
+    #print(max_val)
     r = random.randint(0,max_val)
     for val in data_adj[valor_ref]:
         if r <= data_adj[valor_ref][val]:
@@ -55,7 +56,7 @@ def gera_bloco(w,h,data_00,data_adj):
                 val = int((val1 + val2)/2) #OBS: existe a pequena possibilidade (quase 0) desse valor não existir no dicionário de adjacencias, pode causar problema na proxima geração. Caso aconteça,arrumar
 
             linha.append(val)
-            print(linha)
+            #print(linha)
 
         matrix.append(linha)
 
@@ -75,10 +76,13 @@ if __name__ == "__main__":
   #  prefixos_de_tamanho = {4: "00", 8: "01", 16: "10", 32: "11"}
     for blocks in range(0,1):
         i = 1 #random.randint(0, 1)  # 0 a 3
-        N = 4 * pow(2, i)
+        N = 32#4 * pow(2, i)
         #size = prefixos_de_tamanho[N]
         matrix = gera_bloco(N,N, data_00, data_adj)
         matrix = np.array(matrix)
+        plt.imshow(matrix, cmap='bwr')  # 'viridis' is just one of many available colormaps
+        plt.colorbar()  # Add a color bar to show the scale
+        plt.show()
         print(matrix)
 
     #print(data[0]['ocorrencias'])

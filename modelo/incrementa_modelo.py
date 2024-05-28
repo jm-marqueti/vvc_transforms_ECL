@@ -115,9 +115,9 @@ def prepare_data(matrix, size, data):
     #print(data_aux)
     return data_aux
 
-def read_file(file_path):
-    data_neighbours = {}
-    data_00 = {"total_blocos" : 0}
+def read_file(file_path, data_n, data_0):
+    data_neighbours = data_n
+    data_00 = data_0
     total_samples = 0
 
     try:
@@ -162,6 +162,7 @@ def read_file(file_path):
                         if(j==i and i == 0):
                             if packed_value not in data_00:
                                 data_00[packed_value] = 0
+                            #print(data_00[packed_value])
                             data_00[packed_value]+=1
                             data_00["total_blocos"]+=1
 
@@ -185,7 +186,13 @@ def read_file(file_path):
 if __name__ == "__main__":
     start_time = time.time()
     file_path = 'saida_bin.dat'
-    data_00, data_neighbours, total_samples = read_file(file_path)
+    with open('data_00.pkl', 'rb') as file:
+        data_00 = pickle.load(file)
+
+    with open('data_neighbours.pkl', 'rb') as file:
+        data_adj = pickle.load(file)
+
+    data_00, data_neighbours, total_samples = read_file(file_path,data_adj, data_00)
     #total_samples = get_total_samples(data_neighbours)
    # print(data_00)
   #  print(data_neighbours)
@@ -202,7 +209,7 @@ if __name__ == "__main__":
 
     data_neighbours = prepare_probabilites_adj(data_neighbours)
     data_00 = prepare_probabilites_00(data_00)
-    #print(data_00)
+    print(data_00)
 
 
     with open('data_neighbours.pkl', 'wb') as file: #salvando o dicionário de adjacencia
