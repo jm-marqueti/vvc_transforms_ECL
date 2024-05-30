@@ -86,14 +86,16 @@ def prepare_data(matrix, size, data):
     Exemplo data_aux[77] = {"total": 30, 102: 28, -80, 2}
     nesse exemplo, foram encontrados 30 amostras vizinhas para o valor 77, 28 amostras de valor 102 e 2 amostras de valor -80
     '''
-    data_aux = data
+    data_aux = data.copy()
    # print(matrix)
     for i in range(0,size):
         for j in range(0,size):
             current_value = matrix[i][j]
-           # if current_value>255:
-           #     print(current_value)
-           # print(current_value)
+            if current_value>255:
+                current_value = 255
+            elif current_value <-256:
+                current_value = -256
+
             if current_value not in data_aux: 
                 data_aux[current_value] = {'total_vizinhos':0, "ocorrencias": 0} #inicializa o dicionário de valores no dicionário com contador total de vizinhos e ocorrencia
             else:
@@ -112,9 +114,14 @@ def prepare_data(matrix, size, data):
                     data_aux[current_value][vert_val] = 0
                 data_aux[current_value][vert_val]+=1 #adiciona 1 no contador de ocorrência de vizinhança espacial do current_value
                 data_aux[current_value]['total_vizinhos']+=1
+            if i!=0 and j!=0:
+                diag_val = matrix[i-1][j-1]
+                if diag_val not in data_aux[current_value]:
+                    data_aux[current_value][diag_val] = 0
+                data_aux[current_value][diag_val]+=1 #adiciona 1 no contador de ocorrência de vizinhança espacial do current_value
+                data_aux[current_value]['total_vizinhos']+=1
     #print(data_aux)
     return data_aux
-
 def read_file(file_path, data_n, data_0):
     data_neighbours = data_n
     data_00 = data_0
