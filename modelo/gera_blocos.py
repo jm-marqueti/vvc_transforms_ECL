@@ -55,7 +55,8 @@ def gera_bloco(w,h,data_00,data_adj):
             else:
                 val1 = gera_valor(matrix[i-1][0], data_adj) #pega o valor em cima como referencia
                 val2 = gera_valor(matrix[0][j-1], data_adj) #pega o valor a esquerda como referência
-                val = int((val1 + val2)/2) #OBS: existe a pequena possibilidade (quase 0) desse valor não existir no dicionário de adjacencias, pode causar problema na proxima geração. Caso aconteça,arrumar
+                #val3 = gera_valor(matrix[i-1][j-1], data_adj)
+                val = round((val1 + val2)/2) #OBS: existe a pequena possibilidade (quase 0) desse valor não existir no dicionário de adjacencias, pode causar problema na proxima geração. Caso aconteça,arrumar
 
             linha.append(val)
             #print(linha)
@@ -138,15 +139,16 @@ def gera_matriz_probabilidades(data):
         total_ocr += data_aux[key]["ocorrencias"]
         data_aux[key].pop("ocorrencias")
 
+
     for key in data:
         for subkey in data_aux[key]:
-            print(f"key {key} subkey {subkey}")
+            #print(f"key {key} subkey {subkey}")
             mat_aux[key+256][subkey+256]=data_aux[key][subkey]/total_ocr
 
     mat_aux=np.array(mat_aux)
-    plt.imshow(mat_aux, cmap='coolwarm', vmin=0, vmax=0.1, extent=(-256, 255, -256, 255))
+    plt.imshow(mat_aux, cmap='coolwarm', vmin=0, vmax=0.3, extent=(-256, 255, -256, 255))
     plt.colorbar(label='Value')
-    plt.title('Matrix with Custom Axis Labels')
+    plt.title('Matriz de correlação')
     plt.xlabel('Column Index')
     plt.ylabel('Row Index')
     
@@ -167,7 +169,7 @@ if __name__ == "__main__":
     with open('data_neighbours.pkl', 'rb') as file:
         data_adj = pickle.load(file)
 
-    gera_matriz_probabilidades(data_adj)
+    #gera_matriz_probabilidades(data_adj)
 
   #  prefixos_de_tamanho = {4: "00", 8: "01", 16: "10", 32: "11"}
     with open('data_00.pkl', 'rb') as file:
@@ -177,17 +179,17 @@ if __name__ == "__main__":
         data_adj = pickle.load(file)
     for blocks in range(0,1):
         i = 1 #random.randint(0, 1)  # 0 a 3
-        N = 32#4 * pow(2, i)
+        N = 16#4 * pow(2, i)
         #size = prefixos_de_tamanho[N]
         matrix = gera_bloco(N,N, data_00, data_adj)
         matrix = np.array(matrix)
-        #gera_matriz_correlacao_pseudo(matrix)
+        gera_matriz_correlacao_pseudo(matrix)
         plt.imshow(matrix, cmap='bwr')  # 'viridis' is just one of many available colormaps
         plt.colorbar()  # Add a color bar to show the scale
         plt.show()
-        print(matrix)
+        print(data_adj[0])
 
-    print(data_adj)
+    #print(data_adj)
 
     #print(data[0]['ocorrencias'])
 

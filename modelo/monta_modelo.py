@@ -113,86 +113,87 @@ def prepare_data(matrix, size, data):
                     data_aux[current_value][vert_val] = 0
                 data_aux[current_value][vert_val]+=1 #adiciona 1 no contador de ocorrência de vizinhança espacial do current_value
                 data_aux[current_value]['total_vizinhos']+=1
-            if i!=0 and j!=0:
-                diag_val = matrix[i-1][j-1]
-                if diag_val not in data_aux[current_value]:
-                    data_aux[current_value][diag_val] = 0
-                data_aux[current_value][diag_val]+=1 #adiciona 1 no contador de ocorrência de vizinhança espacial do current_value
-                data_aux[current_value]['total_vizinhos']+=1
+          #  if i!=0 and j!=0:
+           #     diag_val = matrix[i-1][j-1]
+            #    if diag_val not in data_aux[current_value]:
+             #       data_aux[current_value][diag_val] = 0
+              #  data_aux[current_value][diag_val]+=1 #adiciona 1 no contador de ocorrência de vizinhança espacial do current_value
+               # data_aux[current_value]['total_vizinhos']+=1
     #print(data_aux)
     return data_aux
 
-def read_file(file_path):
+def read_file(file_paths):
     data_neighbours = {}
     data_00 = {"total_blocos" : 0}
     total_samples = 0
-
-    try:
-        with open(file_path, 'rb') as file:
-            while True:
-                # Read width (uint8_t)
-                width_bytes = file.read(1)
-                if len(width_bytes) < 1:
-                    print("End of file reached or insufficient data for width.")
-                    break  # End of file reached
-                width = struct.unpack('B', width_bytes)[0]  # Use 'B' for unsigned 8-bit integer
-               # print(f"W = {width}")
-
-                # Read height (uint8_t)
-                height_bytes = file.read(1)
-                if len(height_bytes) < 1:
-                    print("End of file reached or insufficient data for height.")
-                    break  # End of file reached
-                height = struct.unpack('B', height_bytes)[0]  # Use 'B' for unsigned 8-bit integer
-                total_samples += width*height
-              #  print(f"H = {height}")
-
-                # Read the matrix of 9-bit integers packed into 16-bit integers
-                matrix = []
-                for i in range(height):
-                    row = []
-                    for j in range(width):
-                        # Read a 16-bit integer
-                        value_bytes = file.read(2)
-                        if len(value_bytes) < 2:
-                            raise ValueError("File does not contain enough bytes to read matrix data.")
-                        
-                        # Unpack the 16-bit integer and extract the 9-bit value
-                        packed_value = struct.unpack('<h', value_bytes)[0]  # Little-endian signed short (16-bit)
-
-                        if packed_value > 255:
-                            packed_value = -((packed_value ^ 0xFF00) +1)
-                            packed_value = str(bin(packed_value))
-                            packed_value = packed_value[7:]
-                            packed_value = (int(packed_value, 2) - (1 << len(packed_value)))
-
-                        if(j==i and i == 0):
-                            if packed_value not in data_00:
-                                data_00[packed_value] = 0
-                            data_00[packed_value]+=1
-                            data_00["total_blocos"]+=1
-
-
-                        row.append(packed_value)
-                 #   print(row)
-                    matrix.append(row)
-                #print(matrix)
-
-                data_neighbours = prepare_data(matrix, width, data_neighbours)
-               # print(data)
-
-                #print()  # Add a newline for readability between matrices
+    for file_path in file_paths:
+        try:
+            with open(file_path, 'rb') as file:
+                print(f"trabalhando em {file_path}")
+                while True:
+                    # Read width (uint8_t)
+                    width_bytes = file.read(1)
+                    if len(width_bytes) < 1:
+                        print("End of file reached or insufficient data for width.")
+                        break  # End of file reached
+                    width = struct.unpack('B', width_bytes)[0]  # Use 'B' for unsigned 8-bit integer
+                   # print(f"W = {width}")
+    
+                    # Read height (uint8_t)
+                    height_bytes = file.read(1)
+                    if len(height_bytes) < 1:
+                        print("End of file reached or insufficient data for height.")
+                        break  # End of file reached
+                    height = struct.unpack('B', height_bytes)[0]  # Use 'B' for unsigned 8-bit integer
+                    total_samples += width*height
+                  #  print(f"H = {height}")
+    
+                    # Read the matrix of 9-bit integers packed into 16-bit integers
+                    matrix = []
+                    for i in range(height):
+                        row = []
+                        for j in range(width):
+                            # Read a 16-bit integer
+                            value_bytes = file.read(2)
+                            if len(value_bytes) < 2:
+                                raise ValueError("File does not contain enough bytes to read matrix data.")
+                            
+                            # Unpack the 16-bit integer and extract the 9-bit value
+                            packed_value = struct.unpack('<h', value_bytes)[0]  # Little-endian signed short (16-bit)
+    
+                            if packed_value > 255:
+                                packed_value = -((packed_value ^ 0xFF00) +1)
+                                packed_value = str(bin(packed_value))
+                                packed_value = packed_value[7:]
+                                packed_value = (int(packed_value, 2) - (1 << len(packed_value)))
+    
+                            if(j==i and i == 0):
+                                if packed_value not in data_00:
+                                    data_00[packed_value] = 0
+                                data_00[packed_value]+=1
+                                data_00["total_blocos"]+=1
+    
+    
+                            row.append(packed_value)
+                     #   print(row)
+                        matrix.append(row)
+                    #print(matrix)
+    
+                    data_neighbours = prepare_data(matrix, width, data_neighbours)
+                   # print(data)
+    
+                    #print()  # Add a newline for readability between matrices
             
 
-    except FileNotFoundError:
-        print(f"File {file_path} not found.")
+        except FileNotFoundError:
+            print(f"File {file_path} not found.")
 
     return data_00, data_neighbours, total_samples
 
 if __name__ == "__main__":
     start_time = time.time()
-    file_path = 'saida_bin.dat'
-    data_00, data_neighbours, total_samples = read_file(file_path)
+    file_paths = ['saida_bin.dat', 'saida_bin2.dat']
+    data_00, data_neighbours, total_samples = read_file(file_paths)
     #total_samples = get_total_samples(data_neighbours)
    # print(data_00)
   #  print(data_neighbours)
