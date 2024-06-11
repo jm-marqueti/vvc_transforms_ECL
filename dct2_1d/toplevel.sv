@@ -75,9 +75,9 @@ assign   X_4[3] = {X[3][15] , X[3][15], X[3][15], X[3]};
 
  
 // muxes on block inputs 
-assign DCT_16_input = (N == 2'b10) ? X_16 : Y16E;
-assign DCT_8_input  = (N == 2'b01) ? X_8  : Y8E;
-assign DCT_4_input  = (N == 2'b00) ? X_4  : Y4E;
+assign DCT_16_input[0:15] = (N == 2'b10) ? X_16[0:15] : Y16E[0:15];
+assign DCT_8_input[0:7]  = (N == 2'b01) ? X_8[0:7]  : Y8E[0:7];
+assign DCT_4_input[0:3]  = (N == 2'b00) ? X_4[0:3]  : Y4E[0:3];
 
 // block declarations
 dct2_32 DCT32(X           , Y16E, Y16O);
