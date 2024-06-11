@@ -1,47 +1,41 @@
 module control(input start, clk, reset,
 input [1:0] N,
 output reg enable, read, write,
-output reg direction,
+output direction,
+//output reg [5:0] counter,
+//output reg [2:0] current_state,
 output reg [1:0] N1, N2);
 
 //state registers
 reg [2:0] current_state, next_state;
+//reg [2:0] next_state;
 
 //state codification
-localparam IDLE = 3'b000, INIT = 3'b001,  VDW = 3'b010,  VDR = 3'b011, V = 3'b100, HDW = 3'b101, HDR = 3'b101, H = 3'b111;
+localparam IDLE = 3'b000, INIT = 3'b001,  VDW = 3'b010,  VDR = 3'b011, V = 3'b100, HDW = 3'b101, HDR = 3'b110, H = 3'b111;
 
 //variables
 wire signed [6:0] dif;
-reg  [5:0] counter;
 wire signed [5:0] T1, T2;
+wire signed [5:0] TN;
+reg [5:0] counter;
 
 //decode transform size
 decode_size size1(N1, T1);
 decode_size size2(N2, T2);
+decode_size sizeN(N, TN);
 
 assign dif = T2 - T1;
 
 
-// update state logic
-always @ (posedge clk) begin
-
-	if (reset)
-		current_state <= IDLE;
-	else if (current_state == IDLE && (start))
-		current_state <= INIT;
-	else if (counter == 1)
-		current_state <= next_state;
-	
-end
-
-
 // update N logic
-always @ (counter) begin
+always @ (counter or current_state) begin
 
 	if (counter == 2) begin
-			N2 <= N1;
-			N1 <= N;
+		N2 <= N1;
+		N1 <= N;
 	end
+	else if (current_state == INIT)
+		N1 <= N;
 
 end
 
@@ -73,94 +67,82 @@ end
 
 
 //direction logic
-always @(counter or current_state) begin
+assign direction = (current_state == IDLE) ? 1'b0 :
+(current_state == INIT) ?  1'b0:
+(current_state == V) ? 1'b1 :
+(current_state == H) ? 1'b0 : 1'b0;
+
+/*
 	if (current_state == V || current_state == VDW || current_state == VDR)
 			direction <= 1;
 	else
 			direction <= 0;
-end
-	
+*/
 
 // counter logic
 always @ (posedge clk) begin
 
-if (counter != 1)
-	counter <= counter - 6'd1;
+	if (reset)
+		current_state <= IDLE;
+	else if (current_state == IDLE && (start))
+		current_state <= INIT;
+	else if (counter == 1)
+		current_state <= next_state;
 
 	case(current_state)
 		IDLE:
-		if (start)
-			counter <= T1;
-		else
-			counter <= 2;
+			counter <= TN;
 
 		INIT:
 		if (counter == 1)
 			counter <= T1;
+		else
+			counter <= counter - 6'd1;
 		
 		V:
 		if (counter == 1)
 			counter <= T1;
+		else
+			counter <= counter - 6'd1;
 		
 		H:
 		if (counter == 1)
 			counter <= T1;
+		else
+			counter <= counter - 6'd1;
 
 	endcase
 end
 
 
 // in-state logic
-always @ (current_state or counter) begin
+always @ (current_state) begin
 
 	case(current_state)
 		IDLE: begin
-		enable <= 0;
-		write <= 0;
-		read <= 0;
+		enable = 0;
+		write = 0;
+		read = 0;
 		end
 		
 		INIT: begin
-		enable <= 1;
-		write <= 0;
-		read <= 1;
+		enable = 1;
+		write = 0;
+		read = 1;
 		end
 		
 		V: begin
-		enable <= 1;
-		write <= 1;
-		read <= 1;
+		enable = 1;
+		write = 1;
+		read = 1;
 		end
 
 		H: begin
-		enable <= 1;
-		write <= 1;
-		read <= 1;
+		enable = 1;
+		write = 1;
+		read = 1;
 		end
 
-		VDR: begin
-		enable <= 1;
-		write <= 1;
-		read <= 1;
-		end		
-
-		HDR: begin
-		enable <= 1;
-		write <= 1;
-		read <= 1;
-		end
-		
-		VDW: begin
-		enable <= 1;
-		write <= 1;
-		read <= 1;
-		end
-
-		HDW: begin
-		enable <= 1;
-		write <= 1;
-		read <= 1;
-		end
 	endcase
 	
 end

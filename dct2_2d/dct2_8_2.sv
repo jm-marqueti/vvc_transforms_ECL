@@ -19,7 +19,7 @@ endgenerate
 assign Ye = E;
 
 	//ODD (T4O)
-	
+
 wire signed [26:0] x18[0:3],x50[0:3],x75[0:3],x89[0:3];
 
 generate // SAU Setup
@@ -30,10 +30,10 @@ genvar j;
 endgenerate
 
 			//Adder Trees
-assign Yo[0] = x89[0] +x75[1] +x50[2] +x18[3];
-assign Yo[1] = x75[0] -x18[1] -x89[2] -x50[3];
-assign Yo[2] = x50[0] -x89[1] +x18[2] +x75[3];
-assign Yo[3] = x18[0] -x50[1] +x75[2] -x89[3];
+assign Yo[0] = x89[0] + x75[1] + x50[2] + x18[3];
+assign Yo[1] = x75[0] - x18[1] - x89[2] - x50[3];
+assign Yo[2] = x50[0] - x89[1] + x18[2] + x75[3];
+assign Yo[3] = x18[0] - x50[1] + x75[2] - x89[3];
 
 
 

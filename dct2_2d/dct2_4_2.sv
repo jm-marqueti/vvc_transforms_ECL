@@ -4,7 +4,7 @@ output signed [26:0] Ye[0:1], Yo[0:1]);
 wire signed [19:0] E[0:1], O[0:1];
 
 
-// even-odd decomposition
+// even-odd decomp
 generate
 genvar i;
 	for (i = 0; i < 2; i = i + 1) begin: dcmploop

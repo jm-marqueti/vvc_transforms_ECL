@@ -3,6 +3,6 @@ output signed [17:0] even, odd);
 
 assign even = a + b;
 
-assign odd = b - a;
+assign odd = a - b;
 
 endmodule

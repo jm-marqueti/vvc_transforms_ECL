@@ -2,9 +2,10 @@ module dct2_1d_2(input signed [0:511]X_test,
 input [1:0]N,
 output signed [511:0]Y);
 
+wire signed [15:0] X_32[0:31];
 wire signed [16:0] X_16[0:15], DCT_16_input[0:15], Y16E[0:15]; 
-wire signed [17:0] X_8[0:7], DCT_8_input [0:7], Y8E [0:7];
-wire signed [18:0] X_4[0:3], DCT_4_input[0:3], Y4E[0:3];
+wire signed [17:0] X_8 [0:7], DCT_8_input [0:7], Y8E [0:7];
+wire signed [18:0] X_4 [0:3], DCT_4_input[0:3], Y4E[0:3];
 wire signed [26:0] Y2E[0:1], Y2O[0:1], Y4O[0:3], Y8O[0:7], Y16O[0:15];
 wire signed [15:0] Y2E_shifted[0:1], Y2O_shifted[0:1], Y4O_shifted[0:3], Y8O_shifted[0:7], Y16O_shifted[0:15];
 genvar i;
@@ -18,15 +19,17 @@ endgenerate
 
 // signed bit extension on each element
  generate // change for synthesis!
-  
+   for (i = 0; i < 32; i = i + 1) begin: concat_x_32
+      assign X_32[31 - i] = {X[i][15], X[i]};  
+    end
     for (i = 0; i < 16; i = i + 1) begin: concat_x_16
-      assign X_16[i] = {X[i][15], X[i]};  
+      assign X_16[15 - i] = {X[i][15], X[i]};  
     end
 	 for (i = 0; i < 8; i = i + 1) begin: concat_x_8
-      assign X_8[i] = {X[i][15], X[i][15], X[i]};  
+      assign X_8[7 - i] = {X[i][15], X[i][15], X[i]};  
     end
 	 for (i = 0; i < 4; i = i + 1) begin: concat_x_4
-      assign X_4[i] = {X[i][15], X[i][15], X[i][15], X[i]}; 
+      assign X_4[3 - i] = {X[i][15], X[i][15], X[i][15], X[i]}; 
     end
   endgenerate
  
@@ -36,7 +39,7 @@ assign DCT_8_input  = (N == 2'b01) ? X_8  : Y8E;
 assign DCT_4_input  = (N == 2'b00) ? X_4  : Y4E;
 
 // block declarations
-dct2_32_2 DCT32(X,           Y16E, Y16O);
+dct2_32_2 DCT32(X_32,        Y16E, Y16O);
 dct2_16_2 DCT16(DCT_16_input, Y8E,  Y8O);
 dct2_8_2  DCT8 (DCT_8_input,  Y4E,  Y4O);
 dct2_4_2  DCT4 (DCT_4_input,  Y2E,  Y2O);

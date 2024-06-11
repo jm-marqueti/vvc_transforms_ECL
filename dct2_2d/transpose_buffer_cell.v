@@ -8,7 +8,7 @@ module transpose_buffer_cell (
 	out
 );
 
-parameter DATA_WIDTH = 8 ;
+parameter DATA_WIDTH = 16;
 
 input clock, reset, enable, direction;
 input signed[DATA_WIDTH-1:0] in_0, in_1;

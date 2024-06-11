@@ -36,10 +36,10 @@ assign DCT_8_input  = (N == 2'b01) ? X_8  : Y8E;
 assign DCT_4_input  = (N == 2'b00) ? X_4  : Y4E;
 
 // block declarations
-dct2_32_1 DCT32(X,           Y16E, Y16O);
-dct2_16_1 DCT16(DCT_16_input, Y8E,  Y8O);
-dct2_8_1  DCT8 (DCT_8_input,  Y4E,  Y4O);
-dct2_4_1  DCT4 (DCT_4_input,  Y2E,  Y2O);
+dct2_32_1 DCT32(X           , Y16E, Y16O);
+dct2_16_1 DCT16(DCT_16_input, Y8E ,  Y8O);
+dct2_8_1  DCT8 (DCT_8_input , Y4E ,  Y4O);
+dct2_4_1  DCT4 (DCT_4_input , Y2E ,  Y2O);
 
 // shift individual outputs before permutation
 generate // change for synthesis!
@@ -57,10 +57,9 @@ generate // change for synthesis!
       assign Y2O_shifted[i] = (Y2O[i][19:4]);  
 		assign Y2E_shifted[i] = (Y2E[i][19:4]);
     end
-	 
+
 endgenerate
 
-permutate_1 PERMUTATE(Y2E_shifted, Y2O_shifted, Y4O_shifted, Y8O_shifted, Y16O_shifted, N, Y); 
-
+permutate_1 PERMUTATE(Y2E_shifted, Y2O_shifted, Y4O_shifted, Y8O_shifted, Y16O_shifted, N, Y);
 
 endmodule
