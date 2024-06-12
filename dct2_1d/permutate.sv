@@ -1,4 +1,4 @@
-module permutate(input signed [15:0] Y2E[0:1], Y2O[0:1], Y4O[0:3], Y8O[0:7], Y16O[0:15],
+module permutate(input signed [15:0]Y2E[0:1], Y2O[0:1], Y4O[0:3], Y8O[0:7], Y16O[0:15],
 input [1:0]N,
 output signed [511:0]Y
 );
