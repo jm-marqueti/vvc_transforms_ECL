@@ -1,5 +1,5 @@
 module dct2_4 (input signed [18:0]X[0:3], 
-output signed [26:0] Ye[0:1], Yo[0:1]);
+output signed [26:0]Ye[0:1], Yo[0:1]);
 
 wire signed [19:0] E[0:1], O[0:1];
 
