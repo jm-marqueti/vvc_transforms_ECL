@@ -2,7 +2,7 @@ import pickle as pkl
 import pandas as pd
 import sys
 
-#python3 plk_to_csv.py <input> <output>
+#python3 pkl_to_csv.py <input> <output>
 
 with open(str(sys.argv[1]), "rb") as f:
     object = pkl.load(f)
