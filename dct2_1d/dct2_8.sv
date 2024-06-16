@@ -4,7 +4,7 @@ output signed [26:0]Yo[0:3]);
 
 
 //even-odd decomp
-wire signed [18:0] E[0:3], O[0:3];
+wire signed [18:0]E[0:3], O[0:3];
 
 generate
 genvar i;

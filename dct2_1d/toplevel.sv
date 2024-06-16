@@ -1,47 +1,51 @@
 module toplevel(input signed [0:511]X_test,
-input [1:0]N,
-output signed [0:511]Y);
+input [1:0]N_in,
+input clk,
+output reg [0:511]Y);
 
 wire signed [16:0] X_16[0:15], DCT_16_input[0:15], Y16E[0:15]; 
 wire signed [17:0] X_8[0:7], DCT_8_input [0:7], Y8E [0:7];
 wire signed [18:0] X_4[0:3], DCT_4_input[0:3], Y4E[0:3];
 wire signed [26:0] Y2E[0:1], Y2O[0:1], Y4O[0:3], Y8O[0:7], Y16O[0:15];
 wire signed [15:0] Y2E_shifted[0:1], Y2O_shifted[0:1], Y4O_shifted[0:3], Y8O_shifted[0:7], Y16O_shifted[0:15];
-wire signed [15:0] X[0:31];
+reg signed [15:0] X[0:31];
+reg [1:0]N;
 
-assign X[0] = X_test[0:15];
-assign X[1] = X_test[16:31];
-assign X[2] = X_test[32:47];
-assign X[3] = X_test[48:63];
-assign X[4] = X_test[64:79];
-assign X[5] = X_test[80:95];
-assign X[6] = X_test[96:111];
-assign X[7] = X_test[112:127];
-assign X[8] = X_test[128:143];
-assign X[9] = X_test[144:159];
-assign X[10]= X_test[160:175];
-assign X[11]= X_test[176:191];
-assign X[12]= X_test[192:207];
-assign X[13]= X_test[208:223];
-assign X[14]= X_test[224:239];
-assign X[15]= X_test[240:255];
-assign X[16]= X_test[256:271];
-assign X[17]= X_test[272:287];
-assign X[18]= X_test[288:303];
-assign X[19]= X_test[304:319];
-assign X[20]= X_test[320:335];
-assign X[21]= X_test[336:351];
-assign X[22]= X_test[352:367];
-assign X[23]= X_test[368:383];
-assign X[24]= X_test[384:399];
-assign X[25]= X_test[400:415];
-assign X[26]= X_test[416:431];
-assign X[27]= X_test[432:447];
-assign X[28]= X_test[448:463];
-assign X[29]= X_test[464:479];
-assign X[30]= X_test[480:495];
-assign X[31]= X_test[496:511];
-
+always @(posedge clk) begin
+ N <= N_in;
+ X[0] <= X_test[0:15];
+ X[1] <= X_test[16:31];
+ X[2] <= X_test[32:47];
+ X[3] <= X_test[48:63];
+ X[4] <= X_test[64:79];
+ X[5] <= X_test[80:95];
+ X[6] <= X_test[96:111];
+ X[7] <= X_test[112:127];
+ X[8] <= X_test[128:143];
+ X[9] <= X_test[144:159];
+ X[10]<= X_test[160:175];
+ X[11]<= X_test[176:191];
+ X[12]<= X_test[192:207];
+ X[13]<= X_test[208:223];
+ X[14]<= X_test[224:239];
+ X[15]<= X_test[240:255];
+ X[16]<= X_test[256:271];
+ X[17]<= X_test[272:287];
+ X[18]<= X_test[288:303];
+ X[19]<= X_test[304:319];
+ X[20]<= X_test[320:335];
+ X[21]<= X_test[336:351];
+ X[22]<= X_test[352:367];
+ X[23]<= X_test[368:383];
+ X[24]<= X_test[384:399];
+ X[25]<= X_test[400:415];
+ X[26]<= X_test[416:431];
+ X[27]<= X_test[432:447];
+ X[28]<= X_test[448:463];
+ X[29]<= X_test[464:479];
+ X[30]<= X_test[480:495];
+ X[31]<= X_test[496:511];
+end
 
 // signed bit extension on each element
 assign  X_16[0] = {X[0][15] , X[0]};
@@ -121,7 +125,7 @@ assign Y16O_shifted[13]= Y16O[13][26:11];
 assign Y16O_shifted[14]= Y16O[14][26:11];
 assign Y16O_shifted[15]= Y16O[15][26:11];
 
-permutate PERMUTATE(Y2E_shifted, Y2O_shifted, Y4O_shifted, Y8O_shifted, Y16O_shifted, N, Y); 
+permutate PERMUTATE(Y2E_shifted, Y2O_shifted, Y4O_shifted, Y8O_shifted, Y16O_shifted, N,clk, Y); 
 
 
 endmodule
