@@ -22,8 +22,8 @@ Y = Frequency domain vector (32x16 bits)
 ![alt_text](https://github.com/jm-marqueti/vvc_transforms_ECL/blob/main/images/dct2_1d.png?raw=true)
 
 ### Golden Model and Testbench
-Test vectors have 514 bits, order is {SIZE, INPUTS} with **no spaces**. Non-utilised bits are set to zero. <br> Example for N=4: <br>
-00 0011111100010000 1000000101110001 101110000000001 1010000000100000 0000000000000000000000000000000000...
+Test vectors inputs have 514 bits, order is {SIZE, INPUTS} with **no spaces**. Non-utilised bits are set to zero. Inputs and outputs are separated by a space, output has 512 bits. <br> Example for N=4: <br>
+00001111110001000010000001011100011011100000000011010000000100001000000000000000000000000000000000... 1001111111110000100110000110100110001110001011010100000000000000000000000000000000000000000000000000...
 
 ## DCT-II 2-D (dct2_2d)
 Two-dimensional DCT-II for square blocks <br>
