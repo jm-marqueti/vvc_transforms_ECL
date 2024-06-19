@@ -82,7 +82,7 @@ if __name__ == "__main__":
             file.write("")
     with open('goldenmodel_output.dat', 'w') as file:
         file.write("")
-    blocks_wished = int(input("Digite quantas matrizes serão geradas: "))
+    blocks_wished = int(input("How many blocks will be generated: "))
     for cases in range(0, blocks_wished):  # numero de matrizes geradas
         i = random.randint(0, 3)  # 0 a 3
         N = 4 * pow(2, i)
