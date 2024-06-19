@@ -62,7 +62,8 @@ def DCT_2(N):
 
 if __name__ == "__main__":
     prefixos_de_tamanho = {4: "00", 8: "01", 16: "10", 32: "11"}
-    for cases in range(0,1000):
+    lines_wished = int(input("How many lines will be generated: "))
+    for cases in range(0,lines_wished):
         i = random.randint(0,3)
         N = 4 * pow(2,i)
 
