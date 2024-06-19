@@ -27,11 +27,6 @@ Test vectors inputs have 514 bits, order is {SIZE, INPUTS} with **no spaces**. N
 
 ## DCT-II 2-D (dct2_2d)
 Two-dimensional DCT-II for square blocks <br>
-### Main files
-**dct2_1d_1**: 1-D transform with input bit-depth 9 <br>
-**transpose_buffer**: 32x32 register array with bit-depth 16 <br>
-**dct2_1d_2**: 1-D transform with input bit-depth 16 <br>
-**control**: Pipeline logic control <br>
 Inputs: <br>
 X = Spatial domain vector (32x9 bits) <br>
 N = Coded size (2 bits) <br>
@@ -40,7 +35,13 @@ reset (1 bit) <br>
 Outputs: <br>
 Y = Frequency domain vector (32x16) <br>
 read (1 bit) <br>
-write (1 bit) <br>
+write (1 bit) 
+### Main files
+**dct2_1d_1**: 1-D transform with input bit-depth 9 <br>
+**transpose_buffer**: 32x32 register array with bit-depth 16 <br>
+**dct2_1d_2**: 1-D transform with input bit-depth 16 <br>
+**control**: Pipeline logic control 
+
 
 ### Block Diagram
 WIP
