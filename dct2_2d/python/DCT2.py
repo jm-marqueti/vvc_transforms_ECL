@@ -82,8 +82,8 @@ if __name__ == "__main__":
             file.write("")
     with open('goldenmodel_output.dat', 'w') as file:
         file.write("")
-
-    for cases in range(0, 1000):  # numero de matrizes geradas
+    blocks_wished = int(input("Digite quantas matrizes serão geradas: "))
+    for cases in range(0, blocks_wished):  # numero de matrizes geradas
         i = random.randint(0, 3)  # 0 a 3
         N = 4 * pow(2, i)
 
@@ -100,8 +100,10 @@ if __name__ == "__main__":
             for l in range(0, N):
                 temp = random.randint(lim_inf, lim_sup)
                 linha.append(temp)  # acrescenta elemento a linha
+                # print(linha)
             linha_bin.append(list(map(decimal_to_9bit_binary, linha)))  # acrescenta elemento a linha binaria
             x.append(linha)
+            # print(x)
             x_bin.append(linha_bin[0])  # INPUT LINHA POR LINHA
 
         #  x = [[ 9957, -6670, -2671, -1448],
@@ -115,13 +117,17 @@ if __name__ == "__main__":
         x_bin = []
         for linha in x:
             x_bin.append(list(map(decimal_to_9bit_binary, linha)))
-        x_bin = np.array(x_bin)
-        x_bonito = np.array(x)
 
+        x_bin = np.array(x_bin)
+
+        x_bonito = np.array(x)
+       # print(x_bonito)
+        # x_bin_b = np.array(x_bin)
         x_bin_2 = []
         for linha in x_bin:
             linha_bin = []
             for vetor in linha:
+                # print(vetor)
                 if (vetor[0] == '1'):
                     linha_bin.append(int(vetor, 2) - (1 << len(vetor)))
                 else:
@@ -143,6 +149,7 @@ if __name__ == "__main__":
                     new_linha.append(int(vetor_bin, 2) - (1 << len(vetor_bin)))
                 else:
                     new_linha.append(int(vetor_bin, 2))
+                # new_linha.append(int(vetor_bin,2)-(1<<16)) #binario truncado -> decimal signed
             new_transformed_med.append(new_linha)
 
         new_transformed_med = np.array(new_transformed_med).transpose()
@@ -155,15 +162,25 @@ if __name__ == "__main__":
         for linha in transformed_fin:
             new_linha = []
             for vetor in linha:
+               # print(decimal_to_27bit_binary(vetor))
                 vetor_bin = decimal_to_27bit_binary(vetor)[:16]  # binario -> binario truncado
+               # print(vetor_bin)
                 if (vetor_bin[0] == '1'):
                     new_linha.append(int(vetor_bin, 2) - (1 << len(vetor_bin)))
                 else:
                     new_linha.append(int(vetor_bin, 2))
+                # new_linha.append(int(vetor_bin,2)-(1<<len(vetor_bin))) #binario truncado -> decimal signed
             new_transformed_fin.append(new_linha)
 
         new_transformed_fin = np.array(new_transformed_fin)
+        #print(new_transformed_fin)
 
+        # Tirar dúvida sobre tamanho e formato do input output. Num de bits nos dois.
+
+        # x_input = prefixos_de_tamanho[N]
+        # for linha in x_bin:
+        #     for vetor in linha:
+        #         x_input+=str(vetor)
 
         with open('goldenmodel_input.dat', 'a') as file:
             for j in range(N):
@@ -174,26 +191,34 @@ if __name__ == "__main__":
                 for p in range(0, 290 - (len(x_input))):
                     formatacao_input += '0'
                 x_input += formatacao_input
+                #    print(x_input)
                 file.write(x_input + "\n")
 
-
+        # formatacao_input = ""
+        # for j in range(0,514-(len(x_input))):
+        #    formatacao_input += '0'
+        #
+        # x_input+=formatacao_input
+        # formatacao_input=x_input
 
         output = ""
         for linha in transformed_fin:
             for vetor in linha:
+                # print(decimal_to_27bit_binary(vetor))
                 output += decimal_to_27bit_binary(vetor)[:16]
-
+                # print(output)
+                # output+=str(decimal_to_16bit_binary(int(vetor/pow(2,11))))
 
         with open('goldenmodel_output.dat', 'a') as file:
-            new_transformed_fin = np.array(new_transformed_fin).transpose()
             for j in range(N):
                 x_output = ""
                 for k in range(N):
-                    x_output += decimal_to_16bit_binary(new_transformed_fin[j][k])
+                    x_output += decimal_to_27bit_binary(new_transformed_fin[j][k])
                 formatacao_output = ""
                 for p in range(0, 512 - (len(x_output))):
                     formatacao_output += '0'
                 x_output += formatacao_output
+                #   print(x_output)
                 file.write(x_output + "\n")
 
         formatacao_output = ""
@@ -202,3 +227,5 @@ if __name__ == "__main__":
 
         output += formatacao_output
         formatacao_output = output
+
+    # print(formatacao_input + formatacao_output)
