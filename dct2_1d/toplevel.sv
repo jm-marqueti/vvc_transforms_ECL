@@ -1,6 +1,5 @@
 module toplevel(input signed [0:511]X_test,
 input [1:0],
-input clk,
 output reg [0:511]Y);
 
 wire signed [16:0] X_16[0:15], DCT_16_input[0:15], Y16E[0:15]; 
