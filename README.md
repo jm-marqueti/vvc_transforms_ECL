@@ -32,6 +32,7 @@ X = Spatial domain vector (32x9 bits) <br>
 N = Coded size (2 bits) <br>
 start (1 bit) <br>
 reset (1 bit) <br>
+clk (1 bit) <br>
 Outputs: <br>
 Y = Frequency domain vector (32x16) <br>
 read (1 bit) <br>
