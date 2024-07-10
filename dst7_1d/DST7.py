@@ -17,7 +17,8 @@ def DST7(N):
 
 r32 = DST7(32)
 r16 = DST7(16)
-
+r8 = DST7(8)
+r4 = DST7(4)
 
 
 for linha in r32:
